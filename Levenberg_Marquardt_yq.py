@@ -45,11 +45,8 @@ def Levenberg_Marquardt_yq(fun_rJ, x0,tau, *args):
         rx_new, Jx_new = fun_rJ(x_new, *args)
         f_new = 0.5 * np.linalg.norm(rx_new)**2
 
-        rho = (f - f_new) / (0.5 * np.dot(p, (lambda_val * p - np.dot(Jx.T, rx))))
-        if rho > 0.75:
-            lambda_val /= 3
-        elif rho < 0.25:
-            lambda_val *= 2
+        rho = (f - f_new) / (0.5 * np.dot(p.T, (lambda_val * p - np.dot(Jx.T, rx))))
+    
         
         # Accept or reject x_new
         if rho > 0:
@@ -60,6 +57,7 @@ def Levenberg_Marquardt_yq(fun_rJ, x0,tau, *args):
             df = np.dot(Jx.T, rx)
 
             lambda_val = lambda_val * max(1/3, 1 - (2 * rho - 1)**3)
+            nu = 2
         else:
             lambda_val = lambda_val * nu
             nu = 2 * nu

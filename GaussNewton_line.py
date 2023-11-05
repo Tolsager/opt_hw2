@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def GaussNewton_line_md(fun_rJ, x0, flag_line, *args):
+def GaussNewton_line_md(fun_rJ, x0, flag_line, maxit = None, *args):
     def linearLSQ(A, y):
         Q, R = np.linalg.qr(A, mode='reduced')
         x = np.linalg.solve(R, np.dot(Q.T, y))
@@ -9,10 +9,11 @@ def GaussNewton_line_md(fun_rJ, x0, flag_line, *args):
         return x
     
     # Solver settings and info
-    if type(x0) == float:
-        maxit = 100
-    else:
-        maxit = 100*len(x0)
+    if maxit is None:
+        if type(x0) == float:
+            maxit = 100
+        else:
+            maxit = 100*len(x0)
         
     #print(maxit)
 
